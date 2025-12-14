@@ -12,8 +12,8 @@ export default function NotFound() {
           <p className="text-text-secondary mb-6">
             요청하신 페이지를 찾을 수 없습니다.
           </p>
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="inline-flex items-center justify-center px-6 py-2.5 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors"
           >
             홈으로 돌아가기
