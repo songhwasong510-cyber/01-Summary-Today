@@ -1,27 +1,25 @@
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import DashboardLayout from "@/components/DashboardLayout";
+import { FileQuestion } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname,
-    );
-  }, [location.pathname]);
-
+export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">404</h1>
-        <p className="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-          Return to Home
-        </a>
+    <DashboardLayout>
+      <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="text-center max-w-md">
+          <FileQuestion className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold text-text-primary mb-2">404</h1>
+          <p className="text-text-secondary mb-6">
+            요청하신 페이지를 찾을 수 없습니다.
+          </p>
+          <Link 
+            to="/" 
+            className="inline-flex items-center justify-center px-6 py-2.5 bg-primary text-white font-bold rounded-md hover:bg-primary/90 transition-colors"
+          >
+            홈으로 돌아가기
+          </Link>
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
-};
-
-export default NotFound;
+}
