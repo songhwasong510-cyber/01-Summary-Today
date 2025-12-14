@@ -1,14 +1,1013 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello world project</title>
-  </head>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘의 업무 요약</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1447E6;
+      --primary-foreground: #ffffff;
+      --text-primary: #0F172B;
+      --text-secondary: #314158;
+      --text-tertiary: #45556C;
+      --neutral-20: #F8FAFC;
+      --neutral-50: #F1F5F9;
+      --neutral-200: #CAD5E2;
+      --neutral-300: #90A1B9;
+      --border-light: #BEDBFF;
+      --bg-light-blue: #DBEAFE;
+      --bg-light-indigo: #E0E7FF;
+    }
 
-  <body>
-    <div id="root"></div>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <script type="module" src="/client/App.tsx"></script>
-  </body>
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background-color: #ffffff;
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 234px;
+      background-color: var(--neutral-50);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      border-right: 1px solid var(--neutral-200);
+      position: relative;
+      z-index: 50;
+    }
+
+    .sidebar-header {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--neutral-200);
+    }
+
+    .sidebar-logo {
+      width: 23px;
+      height: 20px;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      padding: 10px 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 42px;
+      padding: 0 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 14px;
+      transition: all 0.2s ease;
+      border: none;
+      background: none;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .menu-item.active {
+      background-color: #ffffff;
+      color: var(--primary);
+      border-left: 2px solid var(--primary);
+      padding-left: 8px;
+      box-shadow: 0 1px 2px rgba(50, 56, 62, 0.08);
+    }
+
+    .menu-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-bottom {
+      padding: 0 12px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .guide-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 42px;
+      padding: 0 10px;
+      border: 1px solid var(--neutral-200);
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      background: none;
+      transition: background-color 0.2s ease;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .guide-btn:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .user-info {
+      width: 100%;
+      height: 58px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .user-info:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--neutral-200);
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .user-details {
+      margin-left: 10px;
+      text-align: left;
+      flex: 1;
+    }
+
+    .user-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .user-email {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      background-color: #ffffff;
+    }
+
+    .content {
+      min-height: 100%;
+      padding: 24px;
+    }
+
+    /* Banner */
+    .ai-banner {
+      margin-bottom: 24px;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      background: linear-gradient(90deg, var(--bg-light-blue) 0%, var(--bg-light-indigo) 100%);
+      box-shadow: 0 2px 8px rgba(50, 56, 62, 0.08);
+    }
+
+    .banner-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .banner-icon {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .banner-icon-bg {
+      position: absolute;
+      inset: 4px;
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.4) 0%, rgba(165, 180, 252, 0.4) 100%);
+      backdrop-filter: blur(6.5px);
+    }
+
+    .banner-icon svg {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+    }
+
+    .banner-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.55;
+    }
+
+    /* Grid Layout */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1279px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Cards */
+    .card {
+      border: 1px solid var(--neutral-200);
+      border-radius: 8px;
+      padding: 16px;
+      background: white;
+      box-shadow: 0 1px 2px rgba(50, 56, 62, 0.08);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      gap: 10px;
+    }
+
+    .card-title-section {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-icon {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .btn-more {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border: none;
+      background: none;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.2s ease;
+      font-family: 'Pretendard Variable', sans-serif;
+    }
+
+    .btn-more:hover {
+      background-color: rgba(20, 71, 230, 0.05);
+    }
+
+    /* Schedule Card */
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .schedule-item {
+      position: relative;
+      display: flex;
+      border: 1px solid var(--neutral-50);
+      border-radius: 8px;
+      padding: 20px;
+      padding-left: 20px;
+    }
+
+    .schedule-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 2px;
+      height: 62px;
+      background: transparent;
+    }
+
+    .schedule-item-content {
+      flex: 1;
+    }
+
+    .schedule-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .schedule-meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+
+    .schedule-meta svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Mail Card */
+    .mail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mail-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--neutral-50);
+      border-radius: 8px;
+      padding: 12px;
+      height: 90px;
+      gap: 10px;
+    }
+
+    .mail-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 14px;
+      width: 2px;
+      height: 62px;
+      background: transparent;
+    }
+
+    .mail-content {
+      flex: 1;
+      padding-left: 10px;
+    }
+
+    .mail-sender {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .mail-sender svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .mail-subject {
+      font-size: 14px;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .mail-time {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      line-height: 1.5;
+    }
+
+    .mail-time svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* News Card */
+    .news-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .news-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .news-stats {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      border-radius: 4px;
+    }
+
+    .stat-item svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .date-picker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--neutral-200);
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      font-size: 14px;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+    }
+
+    .date-picker:hover {
+      background-color: var(--neutral-50);
+    }
+
+    .date-picker svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .news-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .news-section {
+      border: 1px solid var(--neutral-50);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--neutral-50);
+    }
+
+    .section-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border: 1px solid rgba(20, 71, 230, 0.3);
+      border-radius: 6px;
+    }
+
+    .section-badge svg {
+      width: 20px;
+      height: 20px;
+      color: var(--primary);
+    }
+
+    .section-badge-text {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .section-content {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .news-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .news-item-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .news-item-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Hide menu toggle on desktop */
+    .menu-toggle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 60;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 1px solid var(--neutral-200);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px rgba(50, 56, 62, 0.08);
+    }
+
+    .menu-toggle svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media (max-width: 1023px) {
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        z-index: 50;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+      }
+
+      .sidebar-overlay.open {
+        display: block;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .container {
+        padding-top: 0;
+      }
+
+      .content {
+        padding: 16px;
+      }
+
+      .grid-2 {
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .ai-banner {
+        margin-bottom: 16px;
+      }
+
+      .card {
+        padding: 12px;
+      }
+
+      .card-header {
+        margin-bottom: 12px;
+      }
+
+      .news-header {
+        gap: 8px;
+      }
+
+      .news-stats {
+        font-size: 11px;
+      }
+    }
+
+    /* Scrollbar styling */
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--neutral-200);
+      border-radius: 3px;
+    }
+
+    .main::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .main::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .main::-webkit-scrollbar-thumb {
+      background: var(--neutral-200);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <svg class="sidebar-logo" viewBox="0 0 23 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14.0622 0C14.24 0 14.4147 0.0460062 14.5674 0.131673C14.7201 0.218926 14.8475 0.342667 14.9341 0.493377L22.8725 14.1794C22.9559 14.3238 23 14.4856 23 14.6522C23 14.8172 22.9559 14.9806 22.8725 15.1249L20.3324 19.505C20.2458 19.6542 20.1199 19.7795 19.9657 19.8667C19.813 19.954 19.6383 20 19.4604 20H3.53798C3.36013 20 3.18544 19.954 3.03278 19.8667C2.88012 19.7795 2.75263 19.6542 2.66607 19.505L0.127481 15.1249C0.0440676 14.9806 0 14.8172 0 14.6522C0 14.4872 0.0440676 14.3238 0.127481 14.1794L8.06432 0.493377C8.15088 0.344253 8.27836 0.218926 8.43103 0.131673C8.58369 0.0444198 8.75838 0 8.93623 0H14.0622ZM5.98214 15.1186C5.98214 15.1186 9.2085 12.9325 11.4984 12.9325C13.7884 12.9325 17.0147 15.1186 17.0147 15.1186L11.4984 5.46046L5.98214 15.1186Z" fill="#1D293D"/>
+        </svg>
+        <button class="guide-btn" style="width: 32px; height: 32px; padding: 0; margin: 0; border: none; background: none; cursor: pointer;">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2.25 2.25H15.75C16.1642 2.25 16.5 2.58579 16.5 3V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3C1.5 2.58579 1.83579 2.25 2.25 2.25ZM6 3.75H3V14.25H6V3.75ZM7.5 3.75V14.25H15V3.75H7.5Z" fill="#45556C"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="sidebar-menu">
+        <button class="menu-item active" onclick="this.classList.add('active'); document.querySelectorAll('.menu-item').forEach(el => el !== this && el.classList.remove('active'));">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.9993 2.24995C14.4848 2.24995 16.5 4.27135 16.5 6.74556V15.75H6.00074C3.5152 15.75 1.50001 13.7286 1.50001 11.2543V8.24999H3.00001V11.2543C3.00001 12.9031 4.3466 14.25 6.00074 14.25H15V6.74556C15 5.0968 13.6535 3.74995 11.9993 3.74995H7.5V2.24995H11.9993ZM7.5 9.74999H6.00002V8.24999H7.5V9.74999ZM12 9.74999H10.5V8.24999H12V9.74999ZM2.64698 0.989445C2.77938 0.670103 3.22063 0.670104 3.35303 0.989445L3.54273 1.44794C3.86666 2.23004 4.47116 2.85458 5.23096 3.19258L5.7693 3.43208C6.07701 3.56919 6.07697 4.0171 5.7693 4.15425L5.19947 4.40767C4.45873 4.73713 3.86504 5.33954 3.53541 6.0959L3.35011 6.51998C3.21477 6.83057 2.78524 6.83057 2.64991 6.51998L2.4646 6.0959C2.13496 5.33955 1.54129 4.73713 0.800542 4.40767L0.230717 4.15425C-0.0768878 4.0171 -0.0769237 3.56919 0.230717 3.43208L0.76905 3.19258C1.52884 2.85458 2.13335 2.23006 2.45728 1.44794L2.64698 0.989445Z" fill="currentColor"/></svg>
+          Hi, AgentGo
+        </button>
+
+        <button class="menu-item active" onclick="this.classList.add('active'); document.querySelectorAll('.menu-item').forEach(el => el !== this && el.classList.remove('active'));">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15.75C12 16.5784 11.3285 17.25 10.5 17.25H7.5C6.67157 17.25 6 16.5784 6 15.75V15H12V15.75ZM9.25417 1.50655C9.08977 1.97388 9 2.47643 9 2.99995C9 5.48524 11.0147 7.49996 13.5 7.49996C14.0233 7.49996 14.5255 7.40936 14.9927 7.24508C14.9962 7.32961 15 7.41456 15 7.49996C15 8.91928 14.507 10.2234 13.6831 11.2507C13.2707 11.7649 12.2666 12.5457 12.0439 13.5H5.95606C5.73322 12.5455 4.72805 11.7641 4.31543 11.2492C3.49235 10.2222 3 8.91854 3 7.49996C3.00002 4.18627 5.68631 1.49995 9 1.49995C9.08512 1.49995 9.16987 1.50303 9.25417 1.50655ZM13.147 0.246222C13.2794 -0.0731176 13.7206 -0.0731265 13.853 0.246222L14.0427 0.704718C14.3667 1.48681 14.9712 2.11135 15.7309 2.44935L16.2693 2.68885C16.577 2.82597 16.577 3.27387 16.2693 3.41102L15.6994 3.66444C14.9587 3.9939 14.365 4.59632 14.0354 5.35267L13.8501 5.77675C13.7148 6.08734 13.2853 6.08734 13.1499 5.77675L12.9653 5.35267C12.6357 4.5962 12.0414 3.99394 11.3006 3.66444L10.7307 3.41102C10.423 3.27388 10.423 2.82596 10.7307 2.68885L11.2691 2.44935C12.0289 2.11135 12.6334 1.48682 12.9573 0.704718L13.147 0.246222Z" fill="currentColor"/></svg>
+          오늘의 업무 요약
+        </button>
+
+        <button class="menu-item" onclick="this.classList.add('active'); document.querySelectorAll('.menu-item').forEach(el => el !== this && el.classList.remove('active'));">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.535 6.09608L15.3501 6.52034C15.2148 6.83094 14.7852 6.83094 14.6498 6.52034L14.465 6.09608C14.1353 5.3396 13.5416 4.73731 12.8008 4.40781L12.231 4.15442C11.923 4.0174 11.923 3.56911 12.231 3.43209L12.7689 3.19286C13.5288 2.85488 14.1332 2.2303 14.4571 1.44812L14.647 0.989648C14.7794 0.670117 15.2206 0.670117 15.353 0.989648L15.5429 1.44812C15.8669 2.2303 16.4712 2.85488 17.2311 3.19286L17.7689 3.43209C18.077 3.56911 18.077 4.0174 17.7689 4.15442L17.1992 4.40781C16.4584 4.73731 15.8647 5.3396 15.535 6.09608ZM1.5 3C1.5 2.58579 1.83579 2.25 2.25 2.25H10.5V3.75H3V14.25H15V8.25H16.5V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3ZM5.25 9.75H6.75V12.75H5.25V9.75ZM8.25 5.25H9.75V12.75H8.25V5.25ZM11.25 7.5H12.75V12.75H11.25V7.5Z" fill="currentColor"/></svg>
+          나의 활동
+        </button>
+
+        <button class="menu-item" onclick="this.classList.add('active'); document.querySelectorAll('.menu-item').forEach(el => el !== this && el.classList.remove('active'));">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5046 12.7501C2.18041 12.1886 1.93708 11.6026 1.771 11.0056C2.50035 10.6334 2.99979 9.8751 2.99979 9.00015C2.99979 8.12587 2.5011 7.368 1.77265 6.99556C2.10769 5.78738 2.74393 4.6622 3.64856 3.74251C4.33553 4.18812 5.24201 4.2415 5.99979 3.804C6.75757 3.36649 7.16458 2.55476 7.12215 1.73703C8.37098 1.41345 9.66353 1.42503 10.8773 1.73896C10.8356 2.55604 11.2426 3.36684 11.9998 3.804C12.7576 4.24149 13.664 4.18812 14.351 3.74255C14.785 4.18489 15.1708 4.68863 15.495 5.25016C15.8191 5.81167 16.0625 6.39769 16.2286 6.99471C15.4992 7.36685 14.9998 8.1252 14.9998 9.00015C14.9998 9.8745 15.4985 10.6323 16.2269 11.0047C15.8919 12.2129 15.2557 13.3381 14.351 14.2578C13.664 13.8122 12.7576 13.7588 11.9998 14.1963C11.242 14.6338 10.835 15.4456 10.8774 16.2633C9.62865 16.5868 8.3361 16.5753 7.12225 16.2613C7.16393 15.4442 6.75697 14.6335 5.99979 14.1963C5.24204 13.7588 4.33559 13.8121 3.64863 14.2577C3.21463 13.8154 2.82879 13.3117 2.5046 12.7501ZM6.74979 12.8973C7.56833 13.3699 8.15618 14.117 8.43773 14.9744C8.81145 15.01 9.18765 15.0105 9.56145 14.9756C9.84285 14.1178 10.4309 13.3701 11.2498 12.8973C12.0687 12.4244 13.0103 12.2891 13.8939 12.4743C14.111 12.168 14.2986 11.8419 14.4547 11.5005C13.853 10.828 13.4998 9.9453 13.4998 9.00015C13.4998 8.055 13.853 7.1724 14.4547 6.49987C14.3766 6.33037 14.2904 6.16366 14.1959 6.00016C14.1015 5.83664 14.0003 5.67861 13.8925 5.52631C13.0093 5.71107 12.0683 5.5756 11.2498 5.10304C10.4312 4.63046 9.84345 3.88326 9.56183 3.02591C9.18818 2.99035 8.8119 2.98984 8.43818 3.02469C8.1567 3.88253 7.5687 4.63023 6.74979 5.10304C5.93085 5.57585 4.98934 5.7112 4.10571 5.52602C3.88864 5.83231 3.70097 6.15838 3.54492 6.49978C4.14661 7.17233 4.49979 8.055 4.49979 9.00015C4.49979 9.9453 4.14662 10.8279 3.54492 11.5004C3.623 11.6699 3.70923 11.8366 3.80364 12.0001C3.89804 12.1636 3.9993 12.3217 4.10709 12.474C4.99033 12.2893 5.93129 12.4247 6.74979 12.8973ZM8.99977 11.2501C7.75717 11.2501 6.74979 10.2428 6.74979 9.00015C6.74979 7.75755 7.75717 6.75016 8.99977 6.75016C10.2424 6.75016 11.2498 7.75755 11.2498 9.00015C11.2498 10.2428 10.2424 11.2501 8.99977 11.2501ZM8.99977 9.75015C9.414 9.75015 9.74977 9.41437 9.74977 9.00015C9.74977 8.58592 9.414 8.25015 8.99977 8.25015C8.58555 8.25015 8.24977 8.58592 8.24977 9.00015C8.24977 9.41437 8.58555 9.75015 8.99977 9.75015Z" fill="currentColor"/></svg>
+          나의 에이전트 설정
+        </button>
+
+        <button class="menu-item" onclick="this.classList.add('active'); document.querySelectorAll('.menu-item').forEach(el => el !== this && el.classList.remove('active'));">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.25 2.25H15.75C16.1642 2.25 16.5 2.58579 16.5 3V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3C1.5 2.58579 1.83579 2.25 2.25 2.25ZM15 5.42844L9.05385 10.7535L3 5.41195V14.25H15V5.42844ZM3.38359 3.75L9.04642 8.7465L14.6257 3.75H3.38359Z" fill="currentColor"/></svg>
+          Teams
+        </button>
+
+        <button class="menu-item" onclick="this.classList.add('active'); document.querySelectorAll('.menu-item').forEach(el => el !== this && el.classList.remove('active'));">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5.0625 1.875C6.82291 1.875 8.25 3.30209 8.25 5.0625V8.25H5.0625C3.30209 8.25 1.875 6.82291 1.875 5.0625C1.875 3.30209 3.30209 1.875 5.0625 1.875ZM6.75 6.75V5.0625C6.75 4.13052 5.99448 3.375 5.0625 3.375C4.13052 3.375 3.375 4.13052 3.375 5.0625C3.375 5.99448 4.13052 6.75 5.0625 6.75H6.75ZM5.0625 9.75H8.25V12.9375C8.25 14.6979 6.82291 16.125 5.0625 16.125C3.30209 16.125 1.875 14.6979 1.875 12.9375C1.875 11.1771 3.30209 9.75 5.0625 9.75ZM5.0625 11.25C4.13052 11.25 3.375 12.0056 3.375 12.9375C3.375 13.8694 4.13052 14.625 5.0625 14.625C5.99448 14.625 6.75 13.8694 6.75 12.9375V11.25H5.0625ZM12.9375 1.875C14.6979 1.875 16.125 3.30209 16.125 5.0625C16.125 6.82291 14.6979 8.25 12.9375 8.25H9.75V5.0625C9.75 3.30209 11.1771 1.875 12.9375 1.875ZM12.9375 6.75C13.8694 6.75 14.625 5.99448 14.625 5.0625C14.625 4.13052 13.8694 3.375 12.9375 3.375C12.0056 3.375 11.25 4.13052 11.25 5.0625V6.75H12.9375ZM9.75 9.75H12.9375C14.6979 9.75 16.125 11.1771 16.125 12.9375C16.125 14.6979 14.6979 16.125 12.9375 16.125C11.1771 16.125 9.75 14.6979 9.75 12.9375V9.75ZM11.25 11.25V12.9375C11.25 13.8694 12.0056 14.625 12.9375 14.625C13.8694 14.625 14.625 13.8694 14.625 12.9375C14.625 12.0056 13.8694 11.25 12.9375 11.25H11.25Z" fill="currentColor"/></svg>
+          Portal
+        </button>
+      </div>
+
+      <div class="sidebar-bottom">
+        <button class="guide-btn">
+          <svg style="width: 18px; height: 18px;" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.25 16.5H3.75C2.50736 16.5 1.5 15.4927 1.5 14.25V2.25C1.5 1.83579 1.83579 1.5 2.25 1.5H12.75C13.1642 1.5 13.5 1.83579 13.5 2.25V11.25H16.5V14.25C16.5 15.4927 15.4927 16.5 14.25 16.5ZM13.5 12.75V14.25C13.5 14.6642 13.8358 15 14.25 15C14.6642 15 15 14.6642 15 14.25V12.75H13.5ZM12 15V3H3V14.25C3 14.6642 3.33579 15 3.75 15H12ZM4.5 5.25H10.5V6.75H4.5V5.25ZM4.5 8.25H10.5V9.75H4.5V8.25ZM4.5 11.25H8.25V12.75H4.5V11.25Z" fill="#45556C"/></svg>
+          이용가이드
+        </button>
+
+        <button class="user-info">
+          <div class="user-avatar">
+            <svg style="width: 20px; height: 20px;" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.6667 18.3334H15V16.6667C15 15.286 13.8808 14.1667 12.5 14.1667H7.5C6.11929 14.1667 5 15.286 5 16.6667V18.3334H3.33333V16.6667C3.33333 14.3655 5.19882 12.5 7.5 12.5H12.5C14.8012 12.5 16.6667 14.3655 16.6667 16.6667V18.3334ZM10 10.8334C7.23858 10.8334 5 8.59479 5 5.83337C5 3.07195 7.23858 0.833374 10 0.833374C12.7614 0.833374 15 3.07195 15 5.83337C15 8.59479 12.7614 10.8334 10 10.8334ZM10 9.16671C11.8409 9.16671 13.3333 7.67432 13.3333 5.83337C13.3333 3.99242 11.8409 2.50004 10 2.50004C8.15905 2.50004 6.66667 3.99242 6.66667 5.83337C6.66667 7.67432 8.15905 9.16671 10 9.16671Z" fill="#0F172B"/></svg>
+          </div>
+          <div class="user-details">
+            <div class="user-name">홍길동</div>
+            <div class="user-email">gildong@itcen.com</div>
+          </div>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Main Content -->
+    <main class="main">
+      <div class="content">
+        <!-- AI Banner -->
+        <div class="ai-banner">
+          <div class="banner-content">
+            <div class="banner-icon">
+              <div class="banner-icon-bg"></div>
+              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.3333 17.5C13.3333 18.4205 12.5872 19.1667 11.6667 19.1667H8.33334C7.41287 19.1667 6.66668 18.4205 6.66668 17.5V16.6667H13.3333V17.5ZM10.2824 1.67399C10.0998 2.19325 10 2.75164 10 3.33333C10 6.09476 12.2386 8.33334 15 8.33334C15.5815 8.33334 16.1394 8.23267 16.6585 8.05014C16.6624 8.14406 16.6667 8.23845 16.6667 8.33334C16.6667 9.91036 16.1188 11.3594 15.2034 12.5009C14.7453 13.0722 13.6296 13.9397 13.3822 15H6.61785C6.37025 13.9395 5.2534 13.0713 4.79494 12.4992C3.8804 11.358 3.33334 9.90953 3.33334 8.33334C3.33337 4.65146 6.31813 1.66666 10 1.66666C10.0946 1.66666 10.1888 1.67008 10.2824 1.67399ZM14.6078 0.273627C14.7549 -0.0811943 15.2452 -0.0812042 15.3923 0.273627L15.603 0.783068C15.963 1.65206 16.6347 2.346 17.4788 2.72155L18.077 2.98766C18.4188 3.14001 18.4188 3.63768 18.077 3.79007L17.4438 4.07165C16.6208 4.43771 15.9612 5.10707 15.5949 5.94746L15.389 6.41866C15.2387 6.76376 14.7614 6.76376 14.611 6.41866L14.4059 5.94746C14.0397 5.10694 13.3793 4.43776 12.5562 4.07165L11.923 3.79007C11.5812 3.63769 11.5812 3.14001 11.923 2.98766L12.5212 2.72155C13.3654 2.346 14.0371 1.65207 14.397 0.783068L14.6078 0.273627Z" fill="white"/>
+              </svg>
+            </div>
+            <h2 class="banner-title">오늘의 업무 요약</h2>
+          </div>
+        </div>
+
+        <!-- Grid Layout -->
+        <div class="grid-2">
+          <!-- Schedule Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-section">
+                <div class="card-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5.83332 2.49998V0.833313H7.49999V2.49998H12.5V0.833313H14.1667V2.49998H17.5C17.9602 2.49998 18.3333 2.87308 18.3333 3.33331V7.49998H16.6667V4.16665H14.1667V5.83331H12.5V4.16665H7.49999V5.83331H5.83332V4.16665H3.33332V15.8333H8.33332V17.5H2.49999C2.03976 17.5 1.66666 17.1269 1.66666 16.6666V3.33331C1.66666 2.87308 2.03976 2.49998 2.49999 2.49998H5.83332ZM14.1667 9.99998C12.3257 9.99998 10.8333 11.4924 10.8333 13.3333C10.8333 15.1742 12.3257 16.6666 14.1667 16.6666C16.0076 16.6666 17.5 15.1742 17.5 13.3333C17.5 11.4924 16.0076 9.99998 14.1667 9.99998ZM9.16666 13.3333C9.16666 10.5719 11.4052 8.33331 14.1667 8.33331C16.9281 8.33331 19.1667 10.5719 19.1667 13.3333C19.1667 16.0947 16.9281 18.3333 14.1667 18.3333C11.4052 18.3333 9.16666 16.0947 9.16666 13.3333ZM13.3333 10.8333V13.6785L15.2441 15.5892L16.4226 14.4107L15 12.9881V10.8333H13.3333Z" fill="#1447E6"/>
+                  </svg>
+                </div>
+                <h3 class="card-title">오늘의 일정</h3>
+              </div>
+            </div>
+            <div class="schedule-list">
+              <div class="schedule-item">
+                <div class="schedule-item-content">
+                  <div class="schedule-title">테크노파크 AI 개발팀 주간 전략 회의</div>
+                  <div class="schedule-meta">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12.8334C3.77833 12.8334 1.16666 10.2217 1.16666 7.00002C1.16666 3.77836 3.77833 1.16669 6.99999 1.16669C10.2216 1.16669 12.8333 3.77836 12.8333 7.00002C12.8333 10.2217 10.2216 12.8334 6.99999 12.8334ZM6.99999 11.6667C9.57733 11.6667 11.6667 9.57736 11.6667 7.00002C11.6667 4.42269 9.57733 2.33335 6.99999 2.33335C4.42266 2.33335 2.33332 4.42269 2.33332 7.00002C2.33332 9.57736 4.42266 11.6667 6.99999 11.6667ZM7.58332 7.00002H9.91666V8.16669H6.41666V4.08335H7.58332V7.00002Z" fill="currentColor"/></svg>
+                    오전 9:00 - 오전 10:00
+                  </div>
+                  <div class="schedule-meta">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.25 11.0833H13.4167V12.25H0.583344V11.0833H1.75001V2.33333C1.75001 2.01117 2.01118 1.75 2.33334 1.75H8.16668C8.48885 1.75 8.75001 2.01117 8.75001 2.33333V11.0833H11.0833V6.41667H9.91668V5.25H11.6667C11.9889 5.25 12.25 5.51117 12.25 5.83333V11.0833ZM2.91668 2.91667V11.0833H7.58334V2.91667H2.91668ZM4.08334 6.41667H6.41668V7.58333H4.08334V6.41667ZM4.08334 4.08333H6.41668V5.25H4.08334V4.08333Z" fill="currentColor"/></svg>
+                    테크노파크 15층 회의실 A
+                  </div>
+                </div>
+              </div>
+
+              <div class="schedule-item">
+                <div class="schedule-item-content">
+                  <div class="schedule-title">스마트시티 혁신팀 월간 프로젝트 리뷰</div>
+                  <div class="schedule-meta">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12.8334C3.77833 12.8334 1.16666 10.2217 1.16666 7.00002C1.16666 3.77836 3.77833 1.16669 6.99999 1.16669C10.2216 1.16669 12.8333 3.77836 12.8333 7.00002C12.8333 10.2217 10.2216 12.8334 6.99999 12.8334ZM6.99999 11.6667C9.57733 11.6667 11.6667 9.57736 11.6667 7.00002C11.6667 4.42269 9.57733 2.33335 6.99999 2.33335C4.42266 2.33335 2.33332 4.42269 2.33332 7.00002C2.33332 9.57736 4.42266 11.6667 6.99999 11.6667ZM7.58332 7.00002H9.91666V8.16669H6.41666V4.08335H7.58332V7.00002Z" fill="currentColor"/></svg>
+                    오후 1:00 - 오후 2:00
+                  </div>
+                  <div class="schedule-meta">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.25 11.0833H13.4167V12.25H0.583344V11.0833H1.75001V2.33333C1.75001 2.01117 2.01118 1.75 2.33334 1.75H8.16668C8.48885 1.75 8.75001 2.01117 8.75001 2.33333V11.0833H11.0833V6.41667H9.91668V5.25H11.6667C11.9889 5.25 12.25 5.51117 12.25 5.83333V11.0833ZM2.91668 2.91667V11.0833H7.58334V2.91667H2.91668ZM4.08334 6.41667H6.41668V7.58333H4.08334V6.41667ZM4.08334 4.08333H6.41668V5.25H4.08334V4.08333Z" fill="currentColor"/></svg>
+                    테크노파크 15층 회의실 B
+                  </div>
+                </div>
+              </div>
+
+              <div class="schedule-item">
+                <div class="schedule-item-content">
+                  <div class="schedule-title">디지털 헬스케어 연구소 분기별 성과 발표</div>
+                  <div class="schedule-meta">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.99999 12.8334C3.77833 12.8334 1.16666 10.2217 1.16666 7.00002C1.16666 3.77836 3.77833 1.16669 6.99999 1.16669C10.2216 1.16669 12.8333 3.77836 12.8333 7.00002C12.8333 10.2217 10.2216 12.8334 6.99999 12.8334ZM6.99999 11.6667C9.57733 11.6667 11.6667 9.57736 11.6667 7.00002C11.6667 4.42269 9.57733 2.33335 6.99999 2.33335C4.42266 2.33335 2.33332 4.42269 2.33332 7.00002C2.33332 9.57736 4.42266 11.6667 6.99999 11.6667ZM7.58332 7.00002H9.91666V8.16669H6.41666V4.08335H7.58332V7.00002Z" fill="currentColor"/></svg>
+                    오후 3:00 - 오후 4:00
+                  </div>
+                  <div class="schedule-meta">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.25 11.0833H13.4167V12.25H0.583344V11.0833H1.75001V2.33333C1.75001 2.01117 2.01118 1.75 2.33334 1.75H8.16668C8.48885 1.75 8.75001 2.01117 8.75001 2.33333V11.0833H11.0833V6.41667H9.91668V5.25H11.6667C11.9889 5.25 12.25 5.51117 12.25 5.83333V11.0833ZM2.91668 2.91667V11.0833H7.58334V2.91667H2.91668ZM4.08334 6.41667H6.41668V7.58333H4.08334V6.41667ZM4.08334 4.08333H6.41668V5.25H4.08334V4.08333Z" fill="currentColor"/></svg>
+                    테크노파크 15층 회의실 C
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mail Card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-section">
+                <div class="card-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.50002 2.5H17.5C17.9603 2.5 18.3334 2.8731 18.3334 3.33333V16.6667C18.3334 17.1269 17.9603 17.5 17.5 17.5H2.50002C2.03979 17.5 1.66669 17.1269 1.66669 16.6667V3.33333C1.66669 2.8731 2.03979 2.5 2.50002 2.5ZM16.6667 6.0316L10.0599 11.9483L3.33335 6.01328V15.8333H16.6667V6.0316ZM3.75957 4.16667L10.0516 9.71833L16.2509 4.16667H3.75957Z" fill="#1447E6"/>
+                  </svg>
+                </div>
+                <h3 class="card-title">오늘의 메일</h3>
+              </div>
+            </div>
+            <div class="mail-list">
+              <div class="mail-item">
+                <div class="mail-content">
+                  <div class="mail-sender">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.6666 12.8333H2.33331V11.6666C2.33331 10.0558 3.63915 8.74998 5.24998 8.74998H8.74998C10.3608 8.74998 11.6666 10.0558 11.6666 11.6666V12.8333ZM6.99998 7.58331C5.06698 7.58331 3.49998 6.0163 3.49998 4.08331C3.49998 2.15032 5.06698 0.583313 6.99998 0.583313C8.93297 0.583313 10.5 2.15032 10.5 4.08331C10.5 6.0163 8.93297 7.58331 6.99998 7.58331Z" fill="currentColor"/></svg>
+                    김하늘
+                  </div>
+                  <div class="mail-subject">테스트 지원 요청: AI 혁신 센터의 새로운 에이전트 서비스</div>
+                  <div class="mail-time">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.00002 12.8334C3.77836 12.8334 1.16669 10.2217 1.16669 7.00002C1.16669 3.77836 3.77836 1.16669 7.00002 1.16669C10.2217 1.16669 12.8334 3.77836 12.8334 7.00002C12.8334 10.2217 10.2217 12.8334 7.00002 12.8334ZM7.00002 11.6667C9.57736 11.6667 11.6667 9.57736 11.6667 7.00002C11.6667 4.42269 9.57736 2.33335 7.00002 2.33335C4.42269 2.33335 2.33335 4.42269 2.33335 7.00002C2.33335 9.57736 4.42269 11.6667 7.00002 11.6667ZM7.58335 7.00002H9.91669V8.16669H6.41669V4.08335H7.58335V7.00002Z" fill="currentColor"/></svg>
+                    오전 11:00
+                  </div>
+                </div>
+              </div>
+
+              <div class="mail-item">
+                <div class="mail-content">
+                  <div class="mail-sender">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.6666 12.8333H2.33331V11.6666C2.33331 10.0558 3.63915 8.74998 5.24998 8.74998H8.74998C10.3608 8.74998 11.6666 10.0558 11.6666 11.6666V12.8333ZM6.99998 7.58331C5.06698 7.58331 3.49998 6.0163 3.49998 4.08331C3.49998 2.15032 5.06698 0.583313 6.99998 0.583313C8.93297 0.583313 10.5 2.15032 10.5 4.08331C10.5 6.0163 8.93297 7.58331 6.99998 7.58331Z" fill="currentColor"/></svg>
+                    이수민
+                  </div>
+                  <div class="mail-subject">AI 혁신 센터의 에이전트 서비스 테스트 요청</div>
+                  <div class="mail-time">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.00002 12.8334C3.77836 12.8334 1.16669 10.2217 1.16669 7.00002C1.16669 3.77836 3.77836 1.16669 7.00002 1.16669C10.2217 1.16669 12.8334 3.77836 12.8334 7.00002C12.8334 10.2217 10.2217 12.8334 7.00002 12.8334ZM7.00002 11.6667C9.57736 11.6667 11.6667 9.57736 11.6667 7.00002C11.6667 4.42269 9.57736 2.33335 7.00002 2.33335C4.42269 2.33335 2.33335 4.42269 2.33335 7.00002C2.33335 9.57736 4.42269 11.6667 7.00002 11.6667ZM7.58335 7.00002H9.91669V8.16669H6.41669V4.08335H7.58335V7.00002Z" fill="currentColor"/></svg>
+                    오후 2:30
+                  </div>
+                </div>
+              </div>
+
+              <div class="mail-item">
+                <div class="mail-content">
+                  <div class="mail-sender">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.6666 12.8333H2.33331V11.6666C2.33331 10.0558 3.63915 8.74998 5.24998 8.74998H8.74998C10.3608 8.74998 11.6666 10.0558 11.6666 11.6666V12.8333ZM6.99998 7.58331C5.06698 7.58331 3.49998 6.0163 3.49998 4.08331C3.49998 2.15032 5.06698 0.583313 6.99998 0.583313C8.93297 0.583313 10.5 2.15032 10.5 4.08331C10.5 6.0163 8.93297 7.58331 6.99998 7.58331Z" fill="currentColor"/></svg>
+                    박지민
+                  </div>
+                  <div class="mail-subject">AI 혁신 센터의 새로운 에이전트 서비스 테스트 요청</div>
+                  <div class="mail-time">
+                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.00002 12.8334C3.77836 12.8334 1.16669 10.2217 1.16669 7.00002C1.16669 3.77836 3.77836 1.16669 7.00002 1.16669C10.2217 1.16669 12.8334 3.77836 12.8334 7.00002C12.8334 10.2217 10.2217 12.8334 7.00002 12.8334ZM7.00002 11.6667C9.57736 11.6667 11.6667 9.57736 11.6667 7.00002C11.6667 4.42269 9.57736 2.33335 7.00002 2.33335C4.42269 2.33335 2.33335 4.42269 2.33335 7.00002C2.33335 9.57736 4.42269 11.6667 7.00002 11.6667ZM7.58335 7.00002H9.91669V8.16669H6.41669V4.08335H7.58335V7.00002Z" fill="currentColor"/></svg>
+                    오후 3:45
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- News Card -->
+        <div class="card">
+          <div class="news-header">
+            <div class="news-title-row">
+              <div class="card-title-section">
+                <div class="card-icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1.66666 3.33333C1.66666 2.8731 2.03976 2.5 2.49999 2.5H17.5C17.9602 2.5 18.3333 2.8731 18.3333 3.33333V16.6667C18.3333 17.1269 17.9602 17.5 17.5 17.5H2.49999C2.03976 17.5 1.66666 17.1269 1.66666 16.6667V3.33333ZM3.33332 4.16667V15.8333H16.6667V4.16667H3.33332ZM4.99999 5.83333H9.99999V10.8333H4.99999V5.83333ZM6.66666 7.5V9.16667H8.33332V7.5H6.66666ZM11.6667 7.5H15V5.83333H11.6667V7.5ZM15 10.8333H11.6667V9.16667H15V10.8333ZM4.99999 12.5V14.1667H15V12.5H4.99999Z" fill="#1447E6"/>
+                  </svg>
+                </div>
+                <h3 class="card-title">오늘의 뉴스 요약</h3>
+              </div>
+              <div class="news-stats">
+                <div class="stat-item">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.66667 2.66654H7.33333V5.99988C7.33333 6.36807 7.03487 6.66654 6.66667 6.66654H3.33333V13.3333H12.6667V6.66654H14V14.0051C14 14.3702 13.7035 14.6665 13.3379 14.6666H2.66211C2.29643 14.6665 2.00001 14.3665 2 13.9953V5.33321L6 1.33516V1.3332H8.66667V2.66654ZM3.88607 5.33321H6V3.22058L3.88607 5.33321ZM12.9805 0.219548C12.8629 -0.0643162 12.4706 -0.0643086 12.3529 0.219548L12.1843 0.627101C11.8963 1.32231 11.359 1.87744 10.6836 2.17788L10.2051 2.39078C9.9316 2.51265 9.93167 2.9108 10.2051 3.0327L10.7116 3.25796C11.3701 3.55085 11.8984 4.0862 12.1914 4.75862L12.3555 5.13557C12.4758 5.41166 12.8576 5.41166 12.9779 5.13557L13.1426 4.75862C13.4356 4.0863 13.9633 3.55082 14.6217 3.25796L15.1283 3.0327C15.4017 2.91079 15.4018 2.51266 15.1283 2.39078L14.6497 2.17788C13.9744 1.87744 13.4371 1.3223 13.1491 0.627101L12.9805 0.219548Z" fill="currentColor"/></svg>
+                  <span>159개의 뉴스 요약</span>
+                </div>
+                <div style="width: 1px; height: 14px; background: var(--neutral-200); display: none;" class="hidden-mobile"></div>
+                <div class="stat-item">
+                  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.00004 14.6667C4.31814 14.6667 1.33337 11.6819 1.33337 8.00004C1.33337 4.31814 4.31814 1.33337 8.00004 1.33337C11.6819 1.33337 14.6667 4.31814 14.6667 8.00004C14.6667 11.6819 11.6819 14.6667 8.00004 14.6667ZM8.00004 13.3334C10.9456 13.3334 13.3334 10.9456 13.3334 8.00004C13.3334 5.05452 10.9456 2.66671 8.00004 2.66671C5.05452 2.66671 2.66671 5.05452 2.66671 8.00004C2.66671 10.9456 5.05452 13.3334 8.00004 13.3334ZM8.66671 8.00004H11.3334V9.33337H7.33337V4.66671H8.66671V8.00004Z" fill="currentColor"/></svg>
+                  <span>업데이트 : 매일 오후 12시</span>
+                </div>
+              </div>
+            </div>
+            <button class="date-picker">
+              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6.75 0.75V2.25H11.25V0.75H12.75V2.25H15.75C16.1642 2.25 16.5 2.58579 16.5 3V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3C1.5 2.58579 1.83579 2.25 2.25 2.25H5.25V0.75H6.75ZM15 8.25H3V14.25H15V8.25ZM5.25 3.75H3V6.75H15V3.75H12.75V5.25H11.25V3.75H6.75V5.25H5.25V3.75Z" fill="currentColor"/>
+              </svg>
+              2025.12.12 (수)
+            </button>
+          </div>
+
+          <div class="news-sections">
+            <!-- AI Section -->
+            <div class="news-section">
+              <div class="section-header">
+                <div class="section-badge">
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.0557 7.24487L17.2612 6.77347C17.6274 5.93293 18.2871 5.26372 19.1102 4.89761L19.7432 4.61606C20.0856 4.46382 20.0856 3.96572 19.7432 3.81347L19.1457 3.54766C18.3013 3.17213 17.6298 2.47815 17.2698 1.60907L17.0588 1.09965C16.9118 0.744615 16.4215 0.744615 16.2744 1.09965L16.0634 1.60907C15.7035 2.47815 15.032 3.17213 14.1877 3.54766L13.59 3.81347C13.2477 3.96572 13.2477 4.46382 13.59 4.61606L14.2231 4.89761C15.0462 5.26372 15.7059 5.93293 16.0722 6.77347L16.2776 7.24487C16.428 7.58997 16.9053 7.58997 17.0557 7.24487ZM4.83327 13.3334H6.62831L7.12832 12.0834H9.53824L10.0382 13.3334H11.8332L9.16657 6.66671H7.49993L4.83327 13.3334ZM8.33327 9.07104L8.87157 10.4167H7.79498L8.33327 9.07104ZM12.5 13.3334V6.66671H14.1667V13.3334H12.5ZM2.49999 2.50004C2.03976 2.50004 1.66666 2.87314 1.66666 3.33337V16.6667C1.66666 17.127 2.03976 17.5 2.49999 17.5H17.5C17.9602 17.5 18.3333 17.127 18.3333 16.6667V9.16671H16.6667V15.8334H3.33332V4.16671H11.6667V2.50004H2.49999Z" fill="currentColor"/>
+                  </svg>
+                  <span class="section-badge-text">AI</span>
+                </div>
+              </div>
+              <div class="section-content">
+                <div class="news-item">
+                  <div class="news-item-title">AI 정책, 윤리 및 사회적 적용</div>
+                  <div class="news-item-desc">문체부와 한국저작권위원회는 '2025 인공지능-저작권 제도개선 협의체' 3차 회의를 개최했고, 연매협과 M83은 연예인 무단 AI 합성·복제를 막는다. 오픈AI는 청소년 사망이 챗GPT 결함이 아닌 오남용 탓이라고 밝혔으며, 정부는 AI 도입을 가속화하며 AI·보안 투자를 확대할 계획이다.</div>
+                </div>
+                <div class="news-item">
+                  <div class="news-item-title">AI 기술 개발 및 인프라</div>
+                  <div class="news-item-desc">류제명 2차관은 SKT, 네이버, 현대차, 삼성SDS와 AI 패권의 핵심인 GPU 워킹그룹을 출범했다. 텐센트는 AI 기반 3D 모델링 툴 '훈위안 3D 생성 엔진'을 출시했으며, 로볼리전트와 원익로보틱스는 AI 휴머노이드 로봇 기술 협력을 시작했다.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cloud Section -->
+            <div class="news-section">
+              <div class="section-header">
+                <div class="section-badge">
+                  <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 1.66663C13.2217 1.66663 15.8333 4.2783 15.8333 7.49996C15.8333 7.59455 15.8311 7.68862 15.8267 7.7821C17.7721 8.46663 19.1667 10.3205 19.1667 12.5C19.1667 15.2614 16.9281 17.5 14.1667 17.5H5.83334C3.07192 17.5 0.833344 15.2614 0.833344 12.5C0.833344 10.3205 2.22789 8.46663 4.17338 7.7821C4.16893 7.68862 4.16668 7.59455 4.16668 7.49996C4.16668 4.2783 6.77835 1.66663 10 1.66663ZM10 3.33329C7.69883 3.33329 5.83334 5.19878 5.83334 7.49996C5.83334 7.56785 5.83495 7.63548 5.83816 7.70283L5.89719 8.94238L4.72654 9.35429C3.40368 9.81971 2.50001 11.074 2.50001 12.5C2.50001 14.3409 3.99239 15.8333 5.83334 15.8333H14.1667C16.0076 15.8333 17.5 14.3409 17.5 12.5C17.5 10.6583 16.0083 9.16663 14.1667 9.16663C12.6942 9.16663 11.4448 10.1214 11.0035 11.4455L9.42201 10.9184C10.0838 8.93204 11.9583 7.49996 14.1667 7.49996C14.1667 5.19878 12.3012 3.33329 10 3.33329Z" fill="currentColor"/>
+                  </svg>
+                  <span class="section-badge-text">클라우드</span>
+                </div>
+              </div>
+              <div class="section-content">
+                <div class="news-item">
+                  <div class="news-item-title">클라우드 협력 동향</div>
+                  <div class="news-item-desc">SKT는 AWS와 협력 협약을 체결했다. 이 협약은 AI 클라우드 분야의 전략적 협력이다. 퓨어스토리지와 MS는 협력 관계를 맺었다. 이들의 협력은 하이브리드 클라우드 현대화를 위한 것이다.</div>
+                </div>
+                <div class="news-item">
+                  <div class="news-item-title">클라우드 행사 참가</div>
+                  <div class="news-item-desc">이노그리드는 '오픈K클라우드 데브데이 2025'에 참가했다. 이 데브데이는 클라우드 관련 행사였다.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Menu Toggle (Mobile) -->
+  <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2.5 5H17.5V6.66667H2.5V5ZM2.5 9.16667H17.5V10.8333H2.5V9.16667ZM2.5 13.3333H17.5V15H2.5V13.3333Z" fill="#1D293D"/>
+    </svg>
+  </button>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    }
+
+    // Close sidebar when clicking on menu items
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('click', () => {
+        if (window.innerWidth < 1024) {
+          toggleSidebar();
+        }
+      });
+    });
+
+    // Close sidebar on resize to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1024) {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('open');
+      }
+    });
+  </script>
+</body>
 </html>
