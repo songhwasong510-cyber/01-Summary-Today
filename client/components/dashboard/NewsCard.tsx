@@ -10,21 +10,21 @@ function NewsSection({ category, icon, items }: NewsSectionProps) {
   const Icon = icon === "ai" ? Sparkles : Cloud;
   
   return (
-    <div className="border border-neutral-50 rounded-lg p-5">
+    <div className="border border-neutral-50 rounded-lg p-4 md:p-5">
       {/* Category Header */}
       <div className="flex items-center gap-2 mb-3 pb-3 border-b border-neutral-50">
         <div className="flex items-center gap-1.5 px-2 py-1 border border-primary/30 rounded-md">
-          <Icon className="w-5 h-5 text-primary" />
-          <span className="text-sm font-bold text-primary">{category}</span>
+          <Icon className="w-4 h-4 md:w-5 md:h-5 text-primary" />
+          <span className="text-xs md:text-sm font-bold text-primary">{category}</span>
         </div>
       </div>
 
       {/* News Items */}
-      <div className="space-y-2.5">
+      <div className="space-y-3 md:space-y-2.5">
         {items.map((item, index) => (
           <div key={index} className="space-y-1.5">
             <h4 className="text-sm font-bold text-text-primary">{item.title}</h4>
-            <p className="text-sm text-text-secondary leading-relaxed">{item.description}</p>
+            <p className="text-xs md:text-sm text-text-secondary leading-relaxed">{item.description}</p>
           </div>
         ))}
       </div>
@@ -67,28 +67,30 @@ export default function NewsCard() {
   return (
     <div className="border border-neutral-200 rounded-lg shadow-sm p-4">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-0 mb-4">
         <div className="flex items-center gap-2.5">
-          <div className="w-[30px] h-[30px] flex items-center justify-center rounded">
+          <div className="w-[30px] h-[30px] flex items-center justify-center rounded flex-shrink-0">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1.66666 3.33333C1.66666 2.8731 2.03976 2.5 2.49999 2.5H17.5C17.9602 2.5 18.3333 2.8731 18.3333 3.33333V16.6667C18.3333 17.1269 17.9602 17.5 17.5 17.5H2.49999C2.03976 17.5 1.66666 17.1269 1.66666 16.6667V3.33333ZM3.33332 4.16667V15.8333H16.6667V4.16667H3.33332ZM4.99999 5.83333H9.99999V10.8333H4.99999V5.83333ZM6.66666 7.5V9.16667H8.33332V7.5H6.66666ZM11.6667 7.5H15V5.83333H11.6667V7.5ZM15 10.8333H11.6667V9.16667H15V10.8333ZM4.99999 12.5V14.1667H15V12.5H4.99999Z" fill="#1447E6"/>
             </svg>
           </div>
           <h3 className="text-base font-bold text-text-primary">오늘의 뉴스 요약</h3>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 text-xs">
+        
+        {/* Stats and Date */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <div className="flex items-center gap-2 text-xs flex-wrap">
             <div className="flex items-center gap-1 px-1.5 py-1 rounded-md">
               <FileText className="w-4 h-4 text-text-tertiary" />
-              <span className="text-text-tertiary font-normal">159개의 뉴스 요약</span>
+              <span className="text-text-tertiary font-normal whitespace-nowrap">159개의 뉴스 요약</span>
             </div>
-            <div className="w-px h-3.5 bg-neutral-200" />
+            <div className="w-px h-3.5 bg-neutral-200 hidden sm:block" />
             <div className="flex items-center gap-1 px-1.5 py-1 rounded-md">
               <Clock className="w-4 h-4 text-text-tertiary" />
-              <span className="text-text-tertiary font-normal">업데이트 : 매일 오후 12시</span>
+              <span className="text-text-tertiary font-normal whitespace-nowrap">업데이트 : 매일 오후 12시</span>
             </div>
           </div>
-          <button className="flex items-center gap-1 px-3 py-1.5 border border-neutral-200 rounded shadow-sm text-sm text-text-tertiary hover:bg-neutral-50 transition-colors">
+          <button className="flex items-center gap-1 px-3 py-1.5 border border-neutral-200 rounded shadow-sm text-xs md:text-sm text-text-tertiary hover:bg-neutral-50 transition-colors whitespace-nowrap">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M6.75 0.75V2.25H11.25V0.75H12.75V2.25H15.75C16.1642 2.25 16.5 2.58579 16.5 3V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3C1.5 2.58579 1.83579 2.25 2.25 2.25H5.25V0.75H6.75ZM15 8.25H3V14.25H15V8.25ZM5.25 3.75H3V6.75H15V3.75H12.75V5.25H11.25V3.75H6.75V5.25H5.25V3.75Z" fill="#1D293D"/>
             </svg>
